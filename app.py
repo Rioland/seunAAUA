@@ -32,6 +32,14 @@ def shop():
 def singlepage():
     return render("single-product.html")
 
+@app.route("/news")
+def news():
+    return render("news.html")
+
+@app.route("/single-news")
+def single-news():
+    return render("single-news.html")
+
 
 if __name__=="__main__":
   app.run(host="0.0.0.0",debug=True)
