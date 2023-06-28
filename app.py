@@ -3,9 +3,59 @@ from flask import render_template as render
 
 app = Flask(__name__)
 
+
+
+products=[
+  {
+  "id":1,
+  "name":"Amala",
+  "price":"1500",
+  "desc":"hgasjgdjhas asjhgdhasd jhasghdgas ",
+  "kg":2,
+  "image":"static/product/amala.webp",
+  "type":2
+},
+
+   {
+  "id":2,
+  "name":"Eforiro",
+  "price":"1500",
+  "desc":"hgasjgdjhas asjhgdhasd jhasghdgas ",
+  "kg":2,
+  "image":"static/product/eforiro.jpeg",
+  "type":2
+},
+
+  {
+  "id":3,
+  "name":"Frey DODO",
+  "price":"1500",
+  "desc":"hgasjgdjhas asjhgdhasd jhasghdgas ",
+  "kg":2,
+  "image":"static/product/frey_dodo.webp",
+  "type":1
+},
+
+   {
+  "id":3,
+  "name":"Ogbona",
+  "price":"1500",
+  "desc":"hgasjgdjhas asjhgdhasd jhasghdgas ",
+  "kg":2,
+  "image":"static/product/ogbona.webp",
+  "type":2
+}
+]
+
+
+
+
+
+
+
 @app.route("/")
 def index():
-    return render("index.html")
+    return render("index.html",products=products)
   
 @app.route("/about")
 def about():
@@ -37,7 +87,7 @@ def news():
     return render("news.html")
 
 @app.route("/single-news")
-def single-news():
+def singlenews():
     return render("single-news.html")
 
 
