@@ -2,58 +2,59 @@ from flask import Flask,request,redirect, url_for,make_response,Response
 from flask import render_template as render
 from werkzeug.utils import secure_filename
 from functions import isNotEmpty
-
+from database import * 
 app = Flask(__name__)
 
 
 
-products=[
-  {
-  "id":1,
-  "name":"Amala",
-  "price":"1500",
-  "desc":"hgasjgdjhas asjhgdhasd jhasghdgas ",
-  "kg":2,
-  "image":"static/product/amala.webp",
-  "type":2
-},
+# products=[
+#   {
+#   "id":1,
+#   "name":"Amala",
+#   "price":"1500",
+#   "desc":"hgasjgdjhas asjhgdhasd jhasghdgas ",
+#   "kg":2,
+#   "image":"static/product/amala.webp",
+#   "type":2
+# },
 
-   {
-  "id":2,
-  "name":"Eforiro",
-  "price":"1500",
-  "desc":"hgasjgdjhas asjhgdhasd jhasghdgas ",
-  "kg":2,
-  "image":"static/product/eforiro.jpeg",
-  "type":2
-},
+#    {
+#   "id":2,
+#   "name":"Eforiro",
+#   "price":"1500",
+#   "desc":"hgasjgdjhas asjhgdhasd jhasghdgas ",
+#   "kg":2,
+#   "image":"static/product/eforiro.jpeg",
+#   "type":2
+# },
 
-  {
-  "id":3,
-  "name":"Frey DODO",
-  "price":"1500",
-  "desc":"hgasjgdjhas asjhgdhasd jhasghdgas ",
-  "kg":2,
-  "image":"static/product/frey_dodo.webp",
-  "type":1
-},
+#   {
+#   "id":3,
+#   "name":"Frey DODO",
+#   "price":"1500",
+#   "desc":"hgasjgdjhas asjhgdhasd jhasghdgas ",
+#   "kg":2,
+#   "image":"static/product/frey_dodo.webp",
+#   "type":1
+# },
 
-   {
-  "id":3,
-  "name":"Ogbona",
-  "price":"1500",
-  "desc":"hgasjgdjhas asjhgdhasd jhasghdgas ",
-  "kg":2,
-  "image":"static/product/ogbona.webp",
-  "type":2
-}
-]
+#    {
+#   "id":3,
+#   "name":"Ogbona",
+#   "price":"1500",
+#   "desc":"hgasjgdjhas asjhgdhasd jhasghdgas ",
+#   "kg":2,
+#   "image":"static/product/ogbona.webp",
+#   "type":2
+# }
+# ]
 
 
 # page routes
 @app.route("/")
 def index():
-    return render("index.html",products=products)
+    product=getProductFromDb()
+    return render("index.html",products=product)
 
 
 
@@ -63,19 +64,26 @@ def index():
 
 @app.route("/save-product", methods=['POST'])
 def saveProduct():
-  message=""
   if request.method == 'POST':
 
     if isNotEmpty(request.form['pname']) and isNotEmpty(request.form['price']) and isNotEmpty(request.form['desc']) and isNotEmpty(request.form['meal_type']):
       
       file = request.files['image']
-      file.save(f"static/product/{secure_filename(file.filename)}")
+      filelocation=f"static/product/{secure_filename(file.filename)}"
+      file.save(filelocation)
+      prod=(request.form['pname'],request.form['price'],
+                           request.form['desc'],request.form['meal_type'],filelocation)
+      output=addPoductToDB(prod)
+      if output==True:
+         resp = make_response(redirect("/add-product"))
+         resp.set_cookie('message', 'successfull')
+         return resp
+      else:
+         resp = make_response(redirect("/add-product"))
+         resp.set_cookie('message', output)
+         return resp
 
-
-
-      resp = make_response(redirect("/add-product"))
-      resp.set_cookie('message', 'successfull')
-      return resp
+     
     else:
       resp = make_response(redirect("/add-product"))
       resp.set_cookie('message', 'All fields are required')
