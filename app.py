@@ -1,5 +1,7 @@
-from flask import Flask
+from flask import Flask,request,redirect, url_for,make_response,Response
 from flask import render_template as render
+from werkzeug.utils import secure_filename
+from functions import isNotEmpty
 
 app = Flask(__name__)
 
@@ -48,14 +50,43 @@ products=[
 ]
 
 
-
-
-
-
-
+# page routes
 @app.route("/")
 def index():
     return render("index.html",products=products)
+
+
+
+
+
+# api routes
+
+@app.route("/save-product", methods=['POST'])
+def saveProduct():
+  message=""
+  if request.method == 'POST':
+
+    if isNotEmpty(request.form['pname']) and isNotEmpty(request.form['price']) and isNotEmpty(request.form['desc']) and isNotEmpty(request.form['meal_type']):
+      
+      file = request.files['image']
+      file.save(f"static/product/{secure_filename(file.filename)}")
+
+
+
+      resp = make_response(redirect("/add-product"))
+      resp.set_cookie('message', 'successfull')
+      return resp
+    else:
+      resp = make_response(redirect("/add-product"))
+      resp.set_cookie('message', 'All fields are required')
+      return resp
+  else:
+      resp = make_response(redirect("/add-product"))
+      resp.set_cookie('message', 'invalid method')
+      return resp
+
+# end of api
+
   
 @app.route("/about")
 def about():
@@ -89,6 +120,19 @@ def news():
 @app.route("/single-news")
 def singlenews():
     return render("single-news.html")
+
+@app.route("/add-product")
+def addProduct():
+    message = request.cookies.get('message')
+    # Response.set_cookie('message', None)
+    return render("add-product.html",message=message)
+
+
+
+
+
+
+
 
 
 if __name__=="__main__":

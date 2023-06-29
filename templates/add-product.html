@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
+
+
+{% include "headers.html" %}
+<br><br><br>
+<!--form  -->
+  <div class="container w-50 py-4">
+    <form  method="post" action="save-product" enctype="multipart/form-data" >
+
+    <div class="mb-3">
+    <label for="productname" class="form-label">Product Name</label>
+    <input type="text" name="pname" class="form-control" required id="productname" aria-describedby="emailHelp">
+    <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
+  </div>
+
+    <div class="mb-3">
+    <label for="productprice" class="form-label">Product Price</label>
+    <input type="number" name="price" min="10" class="form-control" required id="productprice" aria-describedby="emailHelp">
+    <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
+  </div>
+
+      <div class="form-floating">
+  <textarea  required name="desc" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+  <label for="floatingTextarea2">Description</label>
+</div>
+<br>
+
+  <div class="form-floating">
+  <select required class="form-select" name="meal_type" id="floatingSelect" aria-label="Floating label select example">
+    <option >Select Meal type</option>
+    <option value="1">Food</option>
+    <option value="2">Soup</option>
+    <option value="3">Freys</option>
+  </select>
+  
+</div>
+<br>
+    
+    <div>
+  <label for="formFileLg" class="form-label">Meal image</label>
+  <input required class="form-control form-control-lg" id="formFileLg" name="image" type="file">
+</div>  
+
+<br>
+       <button type="submit" class="btn btn-success">Success</button>
+      
+  </form>
+  </div>
+  <script>
+{% if message!="" and message!=None   %}
+
+   
+
+Swal.fire({
+  position: 'top-end',
+  icon: 'info',
+  title: "{{message}}",
+  showConfirmButton: false,
+  timer: 1500
+})
+  {% endif %}
+    </script>
+{% include "footer.html" %}
+
+</body>
+</html>
+
+
+
+
+
+  
