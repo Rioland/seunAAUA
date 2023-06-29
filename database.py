@@ -63,6 +63,21 @@ def getProductFromDb():
   data=cs.fetchall()
   return data
 
-print(getProductFromDb())
+
+def addPoductTcart(productid):
+  cs=connection.cursor()
+  query="SELECT `pid`, `pname`, `price`, `disc`,`image`, `meal_type` FROM `product`"
+  query1="INSERT INTO product(pname, price, disc,meal_type ,image) VALUES (%s, %s, %s, %s, %s)"
+  cs.execute(query,detail)
+  return True
+
+def createUser(detail):
+  cs=connection.cursor()
+  query="INSERT INTO `users`(`fullname`, `phone_number`, `email`, `password`) VALUES (%s, %s, %s, %s)"
+  cs.execute(query,detail)
+  
+  return True
+
+# print(getProductFromDb())
 
 

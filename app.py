@@ -53,8 +53,9 @@ app = Flask(__name__)
 # page routes
 @app.route("/")
 def index():
+    USER = request.cookies.get('USER')
     product=getProductFromDb()
-    return render("index.html",products=product)
+    return render("index.html",products=product,user=USER)
 
 
 
@@ -93,25 +94,98 @@ def saveProduct():
       resp.set_cookie('message', 'invalid method',expires=2)
       return resp
 
+
+@app.route("/register", methods=['POST'])
+def register():
+  if request.method == 'POST':
+    if isNotEmpty(request.form['fname']) and isNotEmpty(request.form['email']) and isNotEmpty(request.form['password']) and isNotEmpty(request.form['phone_number']):
+      prod=(request.form['fname'],request.form['phone_number'],request.form['email'],request.form['password'])
+      output=createUser(prod)
+      if output==True:
+         resp = make_response(redirect("/login"))
+         resp.set_cookie('message', 'successfull',expires=2)
+         return resp
+      else:
+         resp = make_response(redirect("/signup",expires=2))
+         resp.set_cookie('message', output,expires=2)
+         return resp
+      
+
+    
+    else:
+       resp = make_response(redirect("/signup"))
+       resp.set_cookie('message', 'All fields are required',expires=2)
+       return resp
+  else:
+      resp = make_response(redirect("/signup"))
+      resp.set_cookie('message', 'invalid method',expires=2)
+      return resp
+  
+
+
+
 # end of api
 
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @app.route("/about")
 def about():
-    return render("about.html")
+    USER = request.cookies.get('USER')
+    return render("about.html",user=USER)
   
 @app.route("/cart")
 def cart():
-    return render("cart.html")
+    USER = request.cookies.get('USER')
+    if USER!=None and USER!="":
+      return render("cart.html",user=USER)
+    else:
+      resp = make_response(redirect("/login"))
+      resp.set_cookie('message', 'login',expires=2)
+      return resp
+
+
   
 @app.route("/checkout")
 def checkout():
-    return render("checkout.html")
+    USER = request.cookies.get('USER')
+    if USER!=None and USER!="":
+      return render("checkout.html",user=USER)
+    else:
+      resp = make_response(redirect("/login"))
+      resp.set_cookie('message', 'login',expires=2)
+      return resp
+    
+
+
+@app.route("/login")
+def login():
+    return render("login.html")
+
+@app.route("/signup")
+def signUp():
+    return render("signup.html")
 
 
 @app.route("/contact")
 def contact():
-    return render("contact.html")
+    USER = request.cookies.get('USER')
+    return render("contact.html",user=USER)
   
 @app.route("/shop")
 def shop():
@@ -123,11 +197,13 @@ def singlepage():
 
 @app.route("/news")
 def news():
-    return render("news.html")
+    USER = request.cookies.get('USER')
+    return render("news.html",user=USER)
 
 @app.route("/single-news")
 def singlenews():
-    return render("single-news.html")
+    USER = request.cookies.get('USER')
+    return render("single-news.html",user=USER)
 
 @app.route("/add-product")
 def addProduct():
