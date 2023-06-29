@@ -1,8 +1,5 @@
 import mysql.connector as conn
-import json
-from dotenv import load_dotenv
-load_dotenv()
-import os
+
 # import MySQLdb as conn
 
 # connection = conn.connect(
