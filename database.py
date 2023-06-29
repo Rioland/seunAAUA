@@ -53,7 +53,6 @@ def addPoductToDB(detail):
   cs=connection.cursor()
   query="INSERT INTO product(pname, price, disc,meal_type ,image) VALUES (%s, %s, %s, %s, %s)"
   cs.execute(query,detail)
-  connection.close()
   return True
 
 

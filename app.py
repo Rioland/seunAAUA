@@ -76,21 +76,21 @@ def saveProduct():
       output=addPoductToDB(prod)
       if output==True:
          resp = make_response(redirect("/add-product"))
-         resp.set_cookie('message', 'successfull')
+         resp.set_cookie('message', 'successfull',expires=2)
          return resp
       else:
-         resp = make_response(redirect("/add-product"))
-         resp.set_cookie('message', output)
+         resp = make_response(redirect("/add-product",expires=2))
+         resp.set_cookie('message', output,expires=2)
          return resp
 
      
     else:
       resp = make_response(redirect("/add-product"))
-      resp.set_cookie('message', 'All fields are required')
+      resp.set_cookie('message', 'All fields are required',expires=2)
       return resp
   else:
       resp = make_response(redirect("/add-product"))
-      resp.set_cookie('message', 'invalid method')
+      resp.set_cookie('message', 'invalid method',expires=2)
       return resp
 
 # end of api
