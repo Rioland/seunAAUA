@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	
 	<link rel="stylesheet" href="static/css/style.css">
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	</head>
 	<body class="img js-fullheight" style="background-image: url(static/images/banner2.jpeg); background-color:rgb(69, 50, 50);background-blend-mode:darken;">
    
@@ -63,6 +63,20 @@
   <script src="js/bootstrap.min.js"></script>
   <script src="js/main.js"></script>
 
+ 
+{% if message!="" and message!=None   %}
+
+   <script> 
+
+Swal.fire({
+  position: 'top-end',
+  icon: 'info',
+  title: "{{message}}",
+  showConfirmButton: true,
+  timer: 4000
+})
+      </script>
+  {% endif %}
 	</body>
 </html>
 

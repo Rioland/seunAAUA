@@ -1,10 +1,12 @@
-from flask import Flask,request,redirect, url_for,make_response,Response
+from flask import Flask,request,redirect, url_for,make_response,Response,session
 from flask import render_template as render
 from werkzeug.utils import secure_filename
 from functions import isNotEmpty
 from database import * 
+#importing datetime module for now()  
+from datetime import datetime, timedelta 
 app = Flask(__name__)
-
+app.secret_key = "rioland123456"
 
 
 # products=[
@@ -53,9 +55,11 @@ app = Flask(__name__)
 # page routes
 @app.route("/")
 def index():
-    USER = request.cookies.get('USER')
-    product=getProductFromDb()
-    return render("index.html",products=product,user=USER)
+  user=None
+  if "USER" in session:
+    user=session["USER"]
+  product=getProductFromDb()
+  return render("index.html",products=product,user=user)
 
 
 
@@ -76,22 +80,24 @@ def saveProduct():
                            request.form['desc'],request.form['meal_type'],filelocation)
       output=addPoductToDB(prod)
       if output==True:
-         resp = make_response(redirect("/add-product"))
-         resp.set_cookie('message', 'successfull',expires=2)
-         return resp
+        resp = redirect(url_for("addProduct"))
+        session['message']='successfull'
+             # resp.set_cookie('message', 'successfull')
+        return resp
       else:
-         resp = make_response(redirect("/add-product",expires=2))
-         resp.set_cookie('message', output,expires=2)
+         resp = redirect(url_for("addProduct"))
+         session['message']='something went wrong'
          return resp
 
      
     else:
-      resp = make_response(redirect("/add-product"))
-      resp.set_cookie('message', 'All fields are required',expires=2)
+      resp =redirect(url_for( "addProduct" ))
+      session['message']='all fields are required'
       return resp
   else:
-      resp = make_response(redirect("/add-product"))
-      resp.set_cookie('message', 'invalid method',expires=2)
+    
+      resp = redirect(url_for("addProduct"))
+      session['message']= 'invalid method'
       return resp
 
 
@@ -122,6 +128,30 @@ def register():
       return resp
   
 
+@app.route("/auth", methods=['POST'])
+def auth():
+  if request.method == 'POST':
+    if isNotEmpty(request.form['email']) and isNotEmpty(request.form['password']):
+      prod=(request.form['email'],request.form['password'])
+      output=loginUser(prod)
+      print(output)
+      if output!=None:
+         resp = redirect(url_for("index"))
+         session['USER'] = output
+         return resp
+      else:
+        session['message'] = "invalid login details"
+        resp = redirect(url_for("login"))
+        return resp
+    else:
+       resp =redirect(url_for("login"))
+       session['message'] = "All fields are required"
+       return resp
+  else:
+      resp = redirect(url_for("login"))
+      session['message'] = "Invalid method"
+      return resp
+  
 
 
 # end of api
@@ -146,71 +176,119 @@ def register():
 
 @app.route("/about")
 def about():
-    USER = request.cookies.get('USER')
-    return render("about.html",user=USER)
+  user=None
+  if "USER" in session:
+    user=session.get("USER")
+    # USER = request.cookies.get('USER')
+  return render("about.html",user=user)
   
 @app.route("/cart")
 def cart():
-    USER = request.cookies.get('USER')
-    if USER!=None and USER!="":
+    user=None
+    if "USER" in session:
+      user=session.get("USER")
       return render("cart.html",user=USER)
     else:
-      resp = make_response(redirect("/login"))
-      resp.set_cookie('message', 'login',expires=2)
+      resp = redirect(url_for("login"))
+      session['message']="please login"
       return resp
 
 
   
 @app.route("/checkout")
 def checkout():
-    USER = request.cookies.get('USER')
-    if USER!=None and USER!="":
+    user=None
+    if "USER" in session:
+      user=session.get("USER")
       return render("checkout.html",user=USER)
     else:
-      resp = make_response(redirect("/login"))
-      resp.set_cookie('message', 'login',expires=2)
+      resp = redirect(url_for("login"))
+      session['message']="please login"
       return resp
     
 
 
 @app.route("/login")
 def login():
-    return render("login.html")
+  message=None
+  if "message" in session:
+    message=session["message"]
+    session["message"]=""
+  if "USER" in session:
+    return redirect(url_for("index"))
+  else:  
+    return render("login.html",message=message)
+
 
 @app.route("/signup")
 def signUp():
-    return render("signup.html")
+  message=None
+  if "message" in session:
+    message=session["message"]
+    session["message"]=""
+  if "USER" in session:
+    return redirect(url_for("index"))
+  else:  
+    # return render("login.html",message=message)
+    return render("signup.html",message=message)
 
 
 @app.route("/contact")
 def contact():
-    USER = request.cookies.get('USER')
-    return render("contact.html",user=USER)
+  user=None
+  if "USER" in session:
+    user=session["USER"]
+  return render("contact.html",user=user)
   
 @app.route("/shop")
 def shop():
-    return render("shop.html")
+  user=None
+  if "USER" in session:
+    user=session["USER"]
+  return render("shop.html",user=user)
+  
   
 @app.route("/single-product")
 def singlepage():
-    return render("single-product.html")
+  user=None
+  if "USER" in session:
+    user=session["USER"]
+  return render("single-product.html",user=user)
 
 @app.route("/news")
 def news():
-    USER = request.cookies.get('USER')
-    return render("news.html",user=USER)
+  user=None
+  if "USER" in session:
+    user=session["USER"]
+  return render("news.html",user=user)
 
 @app.route("/single-news")
 def singlenews():
-    USER = request.cookies.get('USER')
-    return render("single-news.html",user=USER)
+  user=None
+  if "USER" in session:
+    user=session["USER"]
+  return render("single-news.html",user=user)
 
 @app.route("/add-product")
 def addProduct():
-    message = request.cookies.get('message')
-    # Response.set_cookie('message', None)
-    return render("add-product.html",message=message)
+  message=None
+  if "message" in session:
+    message=session["message"]
+    session["message"]=""
+  
+  return render("add-product.html",message=message)
 
+
+
+
+@app.route("/logout")
+def logout():
+  for key in list(session.keys()):
+     session.pop(key)
+  user=None
+  if "USER" in session:
+    user=session["USER"]
+  return redirect(url_for("login",user=user))
 
 
 

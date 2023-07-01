@@ -52,10 +52,10 @@
       
   </form>
   </div>
-  <script>
+ 
 {% if message!="" and message!=None   %}
 
-   
+   <script> 
 
 Swal.fire({
   position: 'top-end',
@@ -64,8 +64,9 @@ Swal.fire({
   showConfirmButton: true,
   timer: 4000
 })
+      </script>
   {% endif %}
-    </script>
+   
 {% include "footer.html" %}
 
 </body>

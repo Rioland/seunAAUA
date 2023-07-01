@@ -62,13 +62,23 @@ def getProductFromDb():
   cs.execute(query)
   data=cs.fetchall()
   return data
+  
+def loginUser(val):
+  cs=connection.cursor(dictionary=True)
+  query="SELECT  `fullname`, `phone_number`, `email`FROM `users` WHERE `email`=%s AND `password`=%s"
+  cs.execute(query,val)
+  data=cs.fetchall()
+  if len(data)>0:
+    return data
+  else:
+    return None
 
 
 def addPoductTcart(productid):
   cs=connection.cursor()
   query="SELECT `pid`, `pname`, `price`, `disc`,`image`, `meal_type` FROM `product`"
   query1="INSERT INTO product(pname, price, disc,meal_type ,image) VALUES (%s, %s, %s, %s, %s)"
-  cs.execute(query,detail)
+  cs.execute(query,productid)
   return True
 
 def createUser(detail):
@@ -78,6 +88,6 @@ def createUser(detail):
   
   return True
 
-# print(getProductFromDb())
+# print(loginUser(("riolandadedamola@gmail.com","Rioland@1")))
 
 
