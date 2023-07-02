@@ -151,6 +151,7 @@ border-radius: 50%!important;
                 
  {% if user !=None and user!="" %}
                 <li>
+                  <input type="hidden" value="{{user[0]['uid']}}" id="uid" >
                   <a href="#" class="">Profile</a>
 									<ul class="sub-menu">
 										<li><a href="#">{{user[0]['fullname']}}</a></li>

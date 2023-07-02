@@ -98,43 +98,47 @@
  <script>
   
    $(document).ready(function() {
-let url="https://seunaaua-1--rioland.repl.co/addtocart/"
+// let url="https://seunaaua-1--rioland.repl.co/addtocart/"
+let url="https://seunaaua.onrender.com/addtocart/"
 
 $(".addtocart").click(function(e){
         e.preventDefault()
-        var elmId = $(this).attr("id");
+  let user=$("#uid").val()
+  if(user.length>0){
+    var elmId = $(this).attr("id");
         $.ajax({
           url: url+""+elmId,
           methods:"post",
           async: true,
           success: function(result) {
-            // alert(result['message'])
-            showToast(result['message']);
-            Swal.fire({
-  position: 'top-end',
-  icon: 'info',
-  title: result['message'],
-  showConfirmButton: false,
-  timer: 1500
-}).then(()=>{
-              window.location.reload()
-})
+          
+                            Swal.fire({
+                  position: 'top-end',
+                  icon: 'info',
+                  title: result['message'],
+                  showConfirmButton: false,
+                  timer: 1500
+                }).then(()=>{
+                              window.location.reload()
+                })
             console.log(result)
-             // if (result==true){
-             //   console.log(result[])
-             //   alert("Added to cart")
-             // }else{
-             //    alert("something went wrong")
-             // }
+               Swal.fire({
+                  position: 'top-end',
+                  icon: 'info',
+                  title: "please login",
+                  showConfirmButton: false,
+                  timer: 1500
+                }).then(()=>{
+                              window.location.href="/login"
+                })
             }});
+  }else{
+    
+  }
+        
     });
 
      
-     // $(".addtocart").click(function(e){
-     //   e.preventDefault()
-     //  let pid= $(".addtocart").attr('id')
-     //   alert(pid)
-     // })
-     
+    
    })
  </script>
