@@ -1,4 +1,4 @@
-from flask import Flask,request,redirect, url_for,make_response,Response,session
+from flask import Flask,request,redirect, url_for,make_response,Response,session,jsonify
 from flask import render_template as render
 from werkzeug.utils import secure_filename
 from functions import isNotEmpty
@@ -56,10 +56,14 @@ app.secret_key = "rioland123456"
 @app.route("/")
 def index():
   user=None
+  cartCount=0
   if "USER" in session:
     user=session["USER"]
+    nn=user[0]['uid']
+    print(nn)
+    cartCount=getCartCount(nn)
   product=getProductFromDb()
-  return render("index.html",products=product,user=user)
+  return render("index.html",products=product,user=user,cartCount=cartCount)
 
 
 
@@ -154,6 +158,34 @@ def auth():
   
 
 
+
+
+@app.route("/addtocart/<cartid>",methods=["GET","POST"])
+def addToCart(cartid):
+  user=None
+  if "USER" in session:
+    user=session["USER"]
+    uid=user[0]['uid']
+    pn=addTocart(cartid,uid)
+    resp={
+      "error":False,
+      "message":"item Added to cart",
+      "data":""
+    }
+    return jsonify(resp)
+  else:
+    resp={
+      "error":True,
+      "message":"Something went wrong",
+      "data":[]
+    }
+    return jsonify(resp)
+      # resp = redirect(url_for("login"))
+      # session['message']="please login"
+      # return resp
+  
+  
+
 # end of api
 
 
@@ -180,14 +212,17 @@ def about():
   if "USER" in session:
     user=session.get("USER")
     # USER = request.cookies.get('USER')
-  return render("about.html",user=user)
+  cartCount=getCartCount(user[0]['uid'])
+  return render("about.html",user=user,cartCount=cartCount)
   
 @app.route("/cart")
 def cart():
     user=None
     if "USER" in session:
       user=session.get("USER")
-      return render("cart.html",user=USER)
+      cartCount=getCartCount(user[0]['uid'])
+      mycart=getCarts()
+      return render("cart.html",user=user,cartCount=cartCount,cartList=mycart)
     else:
       resp = redirect(url_for("login"))
       session['message']="please login"
@@ -200,7 +235,8 @@ def checkout():
     user=None
     if "USER" in session:
       user=session.get("USER")
-      return render("checkout.html",user=USER)
+      cartCount=getCartCount(user[0]['uid'])
+      return render("checkout.html",user=user,cartCount=cartCount)
     else:
       resp = redirect(url_for("login"))
       session['message']="please login"
@@ -238,36 +274,45 @@ def contact():
   user=None
   if "USER" in session:
     user=session["USER"]
-  return render("contact.html",user=user)
+  cartCount=getCartCount(user[0]['uid'])
+  return render("contact.html",user=user,cartCount=cartCount)
   
 @app.route("/shop")
 def shop():
   user=None
   if "USER" in session:
     user=session["USER"]
-  return render("shop.html",user=user)
+  cartCount=getCartCount(user[0]['uid'])
+  return render("shop.html",user=user,cartCount=cartCount)
   
   
-@app.route("/single-product")
-def singlepage():
-  user=None
-  if "USER" in session:
-    user=session["USER"]
-  return render("single-product.html",user=user)
+# @app.route("/single-product")
+# def singlepage():
+#   user=None
+#   if "USER" in session:
+#     user=session["USER"]
+#   cartCount=getCartCount(user[0]['uid'])
+#   return render("single-product.html",user=user,cartCount=cartCount)
 
-@app.route("/news")
-def news():
-  user=None
-  if "USER" in session:
-    user=session["USER"]
-  return render("news.html",user=user)
+# @app.route("/news")
+# def news():
+#   user=None
+#   if "USER" in session:
+#     user=session["USER"]
+#   cartCount=getCartCount(user[0]['uid'])
+#   return render("news.html",user=user,cartCount=cartCount)
 
-@app.route("/single-news")
-def singlenews():
+# @app.route("/single-news")
+# def singlenews():
   user=None
   if "USER" in session:
     user=session["USER"]
-  return render("single-news.html",user=user)
+  cartCount=getCartCount(user[0]['uid'])
+  return render("single-news.html",user=user,cartCount=cartCount)
+
+
+
+
 
 @app.route("/add-product")
 def addProduct():
@@ -279,6 +324,7 @@ def addProduct():
   return render("add-product.html",message=message)
 
 
+  
 
 
 @app.route("/logout")

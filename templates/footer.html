@@ -92,3 +92,49 @@
 	<script src="static/assets/js/sticker.js"></script>
 	<!-- main js -->
 	<script src="static/assets/js/main.js"></script>
+	<!-- <script src="static/js/jToast.min.js"></script> -->
+
+
+ <script>
+  
+   $(document).ready(function() {
+let url="https://seunaaua-1--rioland.repl.co/addtocart/"
+
+$(".addtocart").click(function(e){
+        e.preventDefault()
+        var elmId = $(this).attr("id");
+        $.ajax({
+          url: url+""+elmId,
+          methods:"post",
+          async: true,
+          success: function(result) {
+            // alert(result['message'])
+            showToast(result['message']);
+            Swal.fire({
+  position: 'top-end',
+  icon: 'info',
+  title: result['message'],
+  showConfirmButton: false,
+  timer: 1500
+}).then(()=>{
+              window.location.reload()
+})
+            console.log(result)
+             // if (result==true){
+             //   console.log(result[])
+             //   alert("Added to cart")
+             // }else{
+             //    alert("something went wrong")
+             // }
+            }});
+    });
+
+     
+     // $(".addtocart").click(function(e){
+     //   e.preventDefault()
+     //  let pid= $(".addtocart").attr('id')
+     //   alert(pid)
+     // })
+     
+   })
+ </script>

@@ -87,7 +87,9 @@
 			</div>
 
 			<div class="row">
+        {% if product !=None %}
         {% for product in products %}
+        {% set pid=product['pid'] %}
         <div class="col-lg-4 col-md-6 text-center" >
 					<div class="single-product-item">
 						<div class="product-image">
@@ -95,12 +97,13 @@
 						</div>
 						<h3>{{product['pname']}}</h3>
 						<p class="product-price"><span>Per Kg</span> <del>N</del> {{product['price']}}</p>
-						<a href="addtocart/{{product['pid']}}" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+						<a id={{pid}} href="#" class="cart-btn addtocart"><i class="fas fa-shopping-cart "> 
+                       </i> Add to Cart</a>
 					</div>
 				</div>
         
         {% endfor %}
-				
+				{% endif %}
 				
         
 			</div>

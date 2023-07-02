@@ -24,6 +24,8 @@
 	<!-- responsive -->
 	<link rel="stylesheet" href="static/assets/css/responsive.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+<script src="static/js/jToast.min.js"></script>
 <style>
   .avatar-big {
   height:100px;
@@ -99,52 +101,69 @@ border-radius: 50%!important;
 										<li><a href="shop">Shop</a></li>
 									</ul>
 								</li>  -->
-								<li><a href="news">News</a>
+								<!-- <li><a href="news">News</a>
 									<ul class="sub-menu">
 										<li><a href="news">News</a></li>
 										<li><a href="single-news">Single News</a></li>
 									</ul>
-								</li>
+								</li> -->
 								<li><a href="contact">Contact</a></li>
               
              
               
 								<li><a href="shop">Shop</a>
-									<ul class="sub-menu">
+									<!-- <ul class="sub-menu">
 										<li><a href="shop">Shop</a></li>
-										<!-- <li><a href="checkout">Check Out</a></li> -->
+										<li><a href="checkout">Check Out</a></li>
 										<li><a href="single-product">Single Product</a></li>
-										<!-- <li><a href="cart">Cart</a></li> -->
-									</ul>
+										<li><a href="cart">Cart</a></li>
+									</ul> -->
 								</li>
-              
-            {% if user !=None and user!="" %}
 
 
-                  <li>
-									<div class="header-icons">
-										<a class="shopping-cart" href="cart.html"><i class="fas fa-shopping-cart"></i></a>
-										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
-                <span>
-                  <a href="shop" class="avatar-small rounded-circle bg-info">P</a>
+             {% if user !=None and user!="" %}
+
+                  <li style="margin-left:8rem;">
+                    <a class="shopping-cart" href="cart">
+                     
+                      <i class="fas fa-shopping-cart">
+                         <sup>
+                     {% if cartCount !=None %}
+                         
+                     <span class="rounded-circle bg-success p-1">
+                       {{cartCount}}
+                     </span> 
+                       {% endif %}
+                    </sup>
+                      </i></a>
+                  </li>
+                  <li >
+									<!-- <div class="header-icons"> -->
+										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>                   
+									<!-- </div> -->
+								</li>
+                
+
+              {% endif %}
+
+
+
+                
+ {% if user !=None and user!="" %}
+                <li>
+                  <a href="#" class="">Profile</a>
 									<ul class="sub-menu">
-										<li><a href="shop">Shop</a></li>
+										<li><a href="#">{{user[0]['fullname']}}</a></li>
 										<!-- <li><a href="checkout">Check Out</a></li> -->
-										<li><a href="single-product">Single Product</a></li>
+										<li><a href="single-product">Settings</a></li>
 										<li><a href="logout">Logout</a></li>
 									</ul>
-								</span>
-									</div>
 								</li>
-                
-              
-                
-               
+     
+          
              {% else %}
-              <li><a href="login">Login</a></li>
-              {% endif %}
-                
-								
+              <li><a href="login">Login</a></li> 
+								  {% endif %}
 							</ul>
 						</nav>
 						<a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>

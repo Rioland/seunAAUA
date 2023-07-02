@@ -35,19 +35,6 @@ connection = conn.connect(
 
 
 
-# sql="""
-# CREATE TABLE `product` (
-#   `pid` INT NOT NULL,
-#   `pname` VARCHAR(45) NOT NULL,
-#   `price` VARCHAR(45) NULL,
-#   `disc` VARCHAR(2000) NULL,
-#   PRIMARY KEY (`pid`));
-# """
-# cusor=connection.cursor()
-# cusor.execute(sql)
-# print(cusor.execute(sql))
-
-
 
 def addPoductToDB(detail):
   cs=connection.cursor()
@@ -65,7 +52,7 @@ def getProductFromDb():
   
 def loginUser(val):
   cs=connection.cursor(dictionary=True)
-  query="SELECT  `fullname`, `phone_number`, `email`FROM `users` WHERE `email`=%s AND `password`=%s"
+  query="SELECT uid, fullname, phone_number,email FROM users WHERE email=%s AND password=%s"
   cs.execute(query,val)
   data=cs.fetchall()
   if len(data)>0:
@@ -74,12 +61,6 @@ def loginUser(val):
     return None
 
 
-def addPoductTcart(productid):
-  cs=connection.cursor()
-  query="SELECT `pid`, `pname`, `price`, `disc`,`image`, `meal_type` FROM `product`"
-  query1="INSERT INTO product(pname, price, disc,meal_type ,image) VALUES (%s, %s, %s, %s, %s)"
-  cs.execute(query,productid)
-  return True
 
 def createUser(detail):
   cs=connection.cursor()
@@ -89,5 +70,66 @@ def createUser(detail):
   return True
 
 # print(loginUser(("riolandadedamola@gmail.com","Rioland@1")))
+
+
+
+def getCartCount(userid):
+  cs=connection.cursor(dictionary=True)
+  query=f"SELECT * FROM cart WHERE uid='{userid}'"
+  cs.execute(query)
+  data=cs.fetchall()
+  if len(data)>0:
+    return len(data)
+  else:
+    return None
+
+
+
+
+
+def getCarts(userid):
+  cs=connection.cursor(dictionary=True)
+  query=f"SELECT product.pname, product.price,product.image,product.pid, cart.cid, cart.uid, (product.price+cart.qty)as total FROM cart INNER JOIN product ON product.pid=cart.pid WHERE cart.uid='{userid}'"
+  cs.execute(query)
+  data=cs.fetchall()
+  print(data)
+  if len(data)>0:
+    return data
+  else:
+    return None
+
+
+
+
+
+def addTocart(pid,uid):
+  try:
+    cs=connection.cursor()
+    query=f"SELECT pid,uid FROM `cart` WHERE `pid`='{pid}'"
+    cs.execute(query)
+    data=cs.fetchall()
+    # print(data)
+    
+    if len(data) >0:
+
+      query2=f"UPDATE cart SET qty=qty+1 WHERE pid={pid}"
+      cs.execute(query2)
+      print("update")
+    else:
+      hj=(uid,pid,"1")
+      query3=f"INSERT INTO cart(uid, pid,qty) VALUES ('{uid}','{pid}','1')"
+      cs.execute(query3)
+      print("set new")
+    return True
+  except OSError:
+     print(OSError)
+     return False
+    
+
+    
+# addTocart("3","4")
+
+
+# getCarts(1)
 
 
