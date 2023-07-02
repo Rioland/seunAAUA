@@ -221,8 +221,16 @@ def cart():
     if "USER" in session:
       user=session.get("USER")
       cartCount=getCartCount(user[0]['uid'])
-      mycart=getCarts()
-      return render("cart.html",user=user,cartCount=cartCount,cartList=mycart)
+      mycart=getCarts(user[0]['uid'])
+      subt=0
+      for v in mycart:
+        subt+=v['total']
+
+      shipping=1500
+      
+
+      
+      return render("cart.html",user=user,cartCount=cartCount,cartList=mycart,subt=subt,shipping=shipping)
     else:
       resp = redirect(url_for("login"))
       session['message']="please login"

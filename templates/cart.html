@@ -43,33 +43,27 @@
 									<th class="product-price">Price</th>
 									<th class="product-quantity">Quantity</th>
 									<th class="product-total">Total</th>
+									<th class="product-total">Action</th>
 								</tr>
 							</thead>
 							<tbody>
+                
+                {% if cartList !=None %}
+              
+                {% for row in cartList%}
+               
 								<tr class="table-body-row">
 									<td class="product-remove"><a href="#"><i class="far fa-window-close"></i></a></td>
-									<td class="product-image"><img src="assets/img/products/product-img-1.jpg" alt=""></td>
-									<td class="product-name">Strawberry</td>
-									<td class="product-price">$85</td>
-									<td class="product-quantity"><input type="number" placeholder="0"></td>
-									<td class="product-total">1</td>
+									<td class="product-image"><img src="{{row['image']}}" alt=""></td>
+									<td class="product-name">{{row['pname']}}</td>
+									<td class="product-price"><del>N</del>{{row['price']}}</td>
+                  {{row['qty']}}
+									<td class="product-quantity"><input id="{{row['cid']}}" type="number" placeholder="{{row['qty']}}" value="{{row['qty']}}"></td>
+									<td class="product-total">{{row['total']}}</td>
+									<td class="product-total"><button class="btn btn-danger" type="button" id="{{row['cid']}}" >del</button></td>
 								</tr>
-								<tr class="table-body-row">
-									<td class="product-remove"><a href="#"><i class="far fa-window-close"></i></a></td>
-									<td class="product-image"><img src="assets/img/products/product-img-2.jpg" alt=""></td>
-									<td class="product-name">Berry</td>
-									<td class="product-price">$70</td>
-									<td class="product-quantity"><input type="number" placeholder="0"></td>
-									<td class="product-total">1</td>
-								</tr>
-								<tr class="table-body-row">
-									<td class="product-remove"><a href="#"><i class="far fa-window-close"></i></a></td>
-									<td class="product-image"><img src="assets/img/products/product-img-3.jpg" alt=""></td>
-									<td class="product-name">Lemon</td>
-									<td class="product-price">$35</td>
-									<td class="product-quantity"><input type="number" placeholder="0"></td>
-									<td class="product-total">1</td>
-								</tr>
+                {% endfor %}
+							{% endif %}
 							</tbody>
 						</table>
 					</div>
@@ -87,25 +81,25 @@
 							<tbody>
 								<tr class="total-data">
 									<td><strong>Subtotal: </strong></td>
-									<td>$500</td>
+									<td>${{subt}}</td>
 								</tr>
 								<tr class="total-data">
 									<td><strong>Shipping: </strong></td>
-									<td>$45</td>
+									<td>${{shipping}}</td>
 								</tr>
 								<tr class="total-data">
 									<td><strong>Total: </strong></td>
-									<td>$545</td>
+									<td>${{shipping+subt}}</td>
 								</tr>
 							</tbody>
 						</table>
 						<div class="cart-buttons">
-							<a href="cart" class="boxed-btn">Update Cart</a>
+							<!-- <a href="cart" class="boxed-btn">Update Cart</a> -->
 							<a href="checkout" class="boxed-btn black">Check Out</a>
 						</div>
 					</div>
 
-					<div class="coupon-section">
+					<!-- <div class="coupon-section">
 						<h3>Apply Coupon</h3>
 						<div class="coupon-form-wrap">
 							<form action="index">
@@ -113,7 +107,7 @@
 								<p><input type="submit" value="Apply"></p>
 							</form>
 						</div>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</div>

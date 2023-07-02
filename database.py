@@ -89,7 +89,7 @@ def getCartCount(userid):
 
 def getCarts(userid):
   cs=connection.cursor(dictionary=True)
-  query=f"SELECT product.pname, product.price,product.image,product.pid, cart.cid, cart.uid, (product.price+cart.qty)as total FROM cart INNER JOIN product ON product.pid=cart.pid WHERE cart.uid='{userid}'"
+  query=f"SELECT product.pname, product.price,product.image,product.pid, cart.cid, cart.uid,cart.qty, (product.price+cart.qty)as total FROM cart INNER JOIN product ON product.pid=cart.pid WHERE cart.uid='{userid}'"
   cs.execute(query)
   data=cs.fetchall()
   print(data)
