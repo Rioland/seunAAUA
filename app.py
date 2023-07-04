@@ -11,48 +11,6 @@ app = Flask(__name__)
 app.secret_key = "rioland123456"
 
 
-# products=[
-#   {
-#   "id":1,
-#   "name":"Amala",
-#   "price":"1500",
-#   "desc":"hgasjgdjhas asjhgdhasd jhasghdgas ",
-#   "kg":2,
-#   "image":"static/product/amala.webp",
-#   "type":2
-# },
-
-#    {
-#   "id":2,
-#   "name":"Eforiro",
-#   "price":"1500",
-#   "desc":"hgasjgdjhas asjhgdhasd jhasghdgas ",
-#   "kg":2,
-#   "image":"static/product/eforiro.jpeg",
-#   "type":2
-# },
-
-#   {
-#   "id":3,
-#   "name":"Frey DODO",
-#   "price":"1500",
-#   "desc":"hgasjgdjhas asjhgdhasd jhasghdgas ",
-#   "kg":2,
-#   "image":"static/product/frey_dodo.webp",
-#   "type":1
-# },
-
-#    {
-#   "id":3,
-#   "name":"Ogbona",
-#   "price":"1500",
-#   "desc":"hgasjgdjhas asjhgdhasd jhasghdgas ",
-#   "kg":2,
-#   "image":"static/product/ogbona.webp",
-#   "type":2
-# }
-# ]
-
 
 # page routes
 @app.route("/")
@@ -217,10 +175,11 @@ def updateCartQty():
 @app.route("/about")
 def about():
   user=None
+  cartCount=0
   if "USER" in session:
     user=session.get("USER")
     # USER = request.cookies.get('USER')
-  cartCount=getCartCount(user[0]['uid'])
+    cartCount=getCartCount(user[0]['uid'])
   return render("about.html",user=user,cartCount=cartCount)
   
 @app.route("/cart")
@@ -294,46 +253,21 @@ def signUp():
 @app.route("/contact")
 def contact():
   user=None
+  cartCount=0
   if "USER" in session:
     user=session["USER"]
-  cartCount=getCartCount(user[0]['uid'])
+    cartCount=getCartCount(user[0]['uid'])
   return render("contact.html",user=user,cartCount=cartCount)
   
 @app.route("/shop")
 def shop():
   user=None
+  cartCount=0
   if "USER" in session:
     user=session["USER"]
-  cartCount=getCartCount(user[0]['uid'])
+    cartCount=getCartCount(user[0]['uid'])
   return render("shop.html",user=user,cartCount=cartCount)
   
-  
-# @app.route("/single-product")
-# def singlepage():
-#   user=None
-#   if "USER" in session:
-#     user=session["USER"]
-#   cartCount=getCartCount(user[0]['uid'])
-#   return render("single-product.html",user=user,cartCount=cartCount)
-
-# @app.route("/news")
-# def news():
-#   user=None
-#   if "USER" in session:
-#     user=session["USER"]
-#   cartCount=getCartCount(user[0]['uid'])
-#   return render("news.html",user=user,cartCount=cartCount)
-
-# @app.route("/single-news")
-# def singlenews():
-  user=None
-  if "USER" in session:
-    user=session["USER"]
-  cartCount=getCartCount(user[0]['uid'])
-  return render("single-news.html",user=user,cartCount=cartCount)
-
-
-
 
 
 @app.route("/add-product")
