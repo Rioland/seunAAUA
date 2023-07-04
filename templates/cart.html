@@ -58,7 +58,8 @@
 									<td class="product-name">{{row['pname']}}</td>
 									<td class="product-price"><del>N</del>{{row['price']}}</td>
                   {{row['qty']}}
-									<td class="product-quantity"><input id="{{row['cid']}}" type="number" placeholder="{{row['qty']}}" value="{{row['qty']}}"></td>
+									<td class="product-quantity"><input class="cqty" min="1" id="{{row['cid']}}" type="number" placeholder="{{row['qty']}}" value="{{row['qty']}}"></td>
+                  
 									<td class="product-total">{{row['total']}}</td>
 									<td class="product-total"><button class="btn btn-danger" type="button" id="{{row['cid']}}" >del</button></td>
 								</tr>
@@ -68,7 +69,9 @@
 						</table>
 					</div>
 				</div>
-
+<script>
+ 
+</script>
 				<div class="col-lg-4">
 					<div class="total-section">
 						<table class="total-table">
@@ -85,11 +88,11 @@
 								</tr>
 								<tr class="total-data">
 									<td><strong>Shipping: </strong></td>
-									<td>del>N</del>{{shipping}}</td>
+									<td><del>N</del>{{shipping}}</td>
 								</tr>
 								<tr class="total-data">
 									<td><strong>Total: </strong></td>
-									<td>del>N</del>{{shipping+subt}}</td>
+									<td><del>N</del>{{shipping+subt}}</td>
 								</tr>
 							</tbody>
 						</table>

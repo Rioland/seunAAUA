@@ -1,9 +1,10 @@
-from flask import Flask,request,redirect, url_for,make_response,Response,session,jsonify
+from flask import Flask,request,redirect, url_for,make_response,session,jsonify
 from flask import render_template as render
 from werkzeug.utils import secure_filename
 from functions import isNotEmpty
 from database import * 
-#importing datetime module for now()  
+import json
+
 from datetime import datetime, timedelta 
 app = Flask(__name__)
 app.secret_key = "rioland123456"
@@ -68,7 +69,7 @@ def index():
 
 
 
-
+# *****************************************************
 # api routes
 
 @app.route("/save-product", methods=['POST'])
@@ -185,11 +186,17 @@ def addToCart(cartid):
       # return resp
   
   
-
+@app.route("/update-cart-qty",methods=["POST"])
+def updateCartQty():
+  data=json.loads(request.data)
+  print(data)
+  respon=updateCartQTY(data)
+  return jsonify({"error":"false","data":respon})
+  
 # end of api
 
 
-
+# ********************************************
 
 
 

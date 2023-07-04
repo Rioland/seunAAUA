@@ -98,8 +98,8 @@
  <script>
   
    $(document).ready(function() {
-// let url="https://seunaaua-1--rioland.repl.co/addtocart/"
-let url="https://seunaaua.onrender.com/addtocart/"
+let url="https://seunaaua-1--rioland.repl.co/"
+// let url="https://seunaaua.onrender.com/"
 
 $(".addtocart").click(function(e){
         e.preventDefault()
@@ -107,7 +107,7 @@ $(".addtocart").click(function(e){
   if(user.length>0){
     var elmId = $(this).attr("id");
         $.ajax({
-          url: url+""+elmId,
+          url: url+"addtocart/"+elmId,
           methods:"post",
           async: true,
           success: function(result) {
@@ -122,7 +122,10 @@ $(".addtocart").click(function(e){
                               window.location.reload()
                 })
             console.log(result)
-               Swal.fire({
+            
+            }});
+  }else{
+      Swal.fire({
                   position: 'top-end',
                   icon: 'info',
                   title: "please login",
@@ -130,15 +133,60 @@ $(".addtocart").click(function(e){
                   timer: 1500
                 }).then(()=>{
                               window.location.href="/login"
-                })
-            }});
-  }else{
-    
+                }) 
   }
         
     });
 
+
+     // *************************************************
+
      
-    
+$(".cqty").change(function(){
+  let cid=$(this).attr("id");
+   let v=$(this).val();
+  let data={
+    "cid":cid,
+    "qty":v
+  }
+
+
+
+       let options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 
+                    'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(data)
+        }
+        // Fake api for making post requests
+        let fetchRes = fetch(url+"update-cart-qty", options);
+        fetchRes.then(res =>
+            res.json()).then(d => {
+                console.log(d)
+             window.location.reload()
+            })
+  
+   
+  // $.ajax({
+  //   url: url+"update-cart-qty",
+  //   type: "POST",
+  //   contentType: "application/json",
+  //   async: true,
+  //   data:JSON.stringify(data),
+  //   success:function (result) {
+  //     console.log(result)
+  //   }
+  // })
+
+
+
+
+
+})
+
+
+  
    })
  </script>

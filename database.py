@@ -126,6 +126,37 @@ def addTocart(pid,uid):
      return False
     
 
+def addTOOther(pid,uid):
+  orderId=generateUnid(10)
+  try:
+    cs=connection.cursor()
+    query=f"SELECT pid,uid FROM `cart` WHERE `pid`='{pid}'"
+    cs.execute(query)
+    data=cs.fetchall()
+    # print(data)
+    
+    if len(data) >0:
+      query2=f"UPDATE cart SET qty=qty+1 WHERE pid={pid}"
+      cs.execute(query2)
+      print("update")
+    else:
+      hj=(uid,pid,"1")
+      query3=f"INSERT INTO cart(uid, pid,qty) VALUES ('{uid}','{pid}','1')"
+      cs.execute(query3)
+      print("set new")
+    return True
+  except OSError:
+     print(OSError)
+     return False
+    
+
+
+def updateCartQTY(data={}):
+  cs=connection.cursor()
+  query2=f"UPDATE cart SET qty={data['qty']} WHERE cid={data['cid']}"
+  print(cs.execute(query2))
+  return True;
+  
     
 # addTocart("3","4")
 

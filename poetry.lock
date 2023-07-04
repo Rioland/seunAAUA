@@ -45,6 +45,17 @@ async = ["asgiref (>=3.2)"]
 dotenv = ["python-dotenv"]
 
 [[package]]
+name = "flask-cors"
+version = "4.0.0"
+description = "A Flask extension adding a decorator for CORS support"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+Flask = ">=0.9"
+
+[[package]]
 name = "itsdangerous"
 version = "2.1.2"
 description = "Safely pass data to untrusted environments and back."
@@ -126,13 +137,14 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "290d6b746cc0e29e8eff135b87c65b69d085fe5c9739c90ff85087f0029fdb45"
+content-hash = "4e6562b8cbb7a4dd51364d0cdd5d22397bb6e5320f0cd83a15a25a0219824a48"
 
 [metadata.files]
 blinker = []
 click = []
 colorama = []
 flask = []
+flask-cors = []
 itsdangerous = []
 jinja2 = []
 markupsafe = []
