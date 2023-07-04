@@ -2,4 +2,5 @@ Flask
 gunicorn
 mysql-connector-python
 werkzeug
+flask_redmail
 # flask-cors

@@ -4,6 +4,7 @@ from werkzeug.utils import secure_filename
 from functions import isNotEmpty
 from database import * 
 import json
+from flask_redmail import RedMail
 
 from datetime import datetime, timedelta 
 app = Flask(__name__)
@@ -251,7 +252,13 @@ def checkout():
     if "USER" in session:
       user=session.get("USER")
       cartCount=getCartCount(user[0]['uid'])
-      return render("checkout.html",user=user,cartCount=cartCount)
+      mycart=getCarts(user[0]['uid'])
+      total=0
+      for v in mycart:
+        total+=v['total']
+
+      shipping=1500
+      return render("checkout.html",user=user,cartCount=cartCount,mycart=mycart,total=total)
     else:
       resp = redirect(url_for("login"))
       session['message']="please login"
