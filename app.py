@@ -1,14 +1,23 @@
 from flask import Flask,request,redirect, url_for,make_response,session,jsonify
 from flask import render_template as render
 from werkzeug.utils import secure_filename
-from functions import isNotEmpty
+from functions import isNotEmpty,generateUnid
 from database import * 
 import json
 from flask_redmail import RedMail
-
+from flask_mail import Mail, Message
 from datetime import datetime, timedelta 
 app = Flask(__name__)
 app.secret_key = "rioland123456"
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 2525
+app.config['MAIL_USERNAME'] = 'Okeseunbaby98@gamil.com'
+app.config['MAIL_PASSWORD'] = 'Oluwaseyi22*'
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+mail = Mail(app)
+
+
 
 
 
@@ -151,14 +160,52 @@ def updateCartQty():
   print(data)
   respon=updateCartQTY(data)
   return jsonify({"error":"false","data":respon})
+
+
+
+
+
+
+
+
+@app.route("/place-oder",methods=["POST"])
+def updateUserOthers():
+  data=json.loads(request.data)
+  user=None
+  if "USER" in session:
+    user=session["USER"]
+    uid=user[0]['uid']
+    trackid=generateUnid(10)
+    order=(uid,trackid,data['remail'],data['rname'],data['reference'],data['trans'],data['trxref'],data['raddress'],data['sometext'],data['phone'])
+    print(order)
+    placeOrder(order)
+    return jsonify({"error":False,"message":"success"})
+  else:
+    return jsonify({"error":True,"message":"something went wrong contact suport"})
+    
+  
+  
   
 # end of api
 
 
 # ********************************************
-
-
-
+@app.route("/sendmail",methods=["GET"])
+def sendFlaskEmail():
+  try:
+    msg = Message(
+                    'Hello',
+                    sender ='seunAAUA',
+                    recipients = ['riolandadedamola@gmail.com']
+                   )
+    msg.body = '<h1>Hello Flask message sent from Flask-Mail</h1>'
+    msg.html="<h1>Hello Flask message sent from Flask-Mail</h1>"
+    
+    mail.send(msg)
+    return "ok let me text it"
+  except Exception as e:
+    print(e)
+    return "llllll"
 
 
 
@@ -181,7 +228,10 @@ def about():
     # USER = request.cookies.get('USER')
     cartCount=getCartCount(user[0]['uid'])
   return render("about.html",user=user,cartCount=cartCount)
-  
+
+
+
+
 @app.route("/cart")
 def cart():
     user=None
@@ -204,6 +254,8 @@ def cart():
       return resp
 
 
+
+
   
 @app.route("/checkout")
 def checkout():
@@ -211,13 +263,13 @@ def checkout():
     if "USER" in session:
       user=session.get("USER")
       cartCount=getCartCount(user[0]['uid'])
-      mycart=getCarts(user[0]['uid'])
+      cartList=getCarts(user[0]['uid'])
       total=0
-      for v in mycart:
+      for v in cartList:
         total+=v['total']
-
       shipping=1500
-      return render("checkout.html",user=user,cartCount=cartCount,mycart=mycart,total=total)
+      
+      return render("checkout.html",user=user,cartCount=cartCount,cartList=cartList,total=total,shipping=shipping)
     else:
       resp = redirect(url_for("login"))
       session['message']="please login"

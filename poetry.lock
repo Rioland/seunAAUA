@@ -56,6 +56,18 @@ python-versions = "*"
 Flask = ">=0.9"
 
 [[package]]
+name = "flask-mail"
+version = "0.9.1"
+description = "Flask extension for sending email"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+blinker = "*"
+Flask = "*"
+
+[[package]]
 name = "itsdangerous"
 version = "2.1.2"
 description = "Safely pass data to untrusted environments and back."
@@ -137,7 +149,7 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "4e6562b8cbb7a4dd51364d0cdd5d22397bb6e5320f0cd83a15a25a0219824a48"
+content-hash = "eaa633d7227450fd23760adc179781f4ed7104f893cfc0de845c2edf36a73a39"
 
 [metadata.files]
 blinker = []
@@ -145,6 +157,7 @@ click = []
 colorama = []
 flask = []
 flask-cors = []
+flask-mail = []
 itsdangerous = []
 jinja2 = []
 markupsafe = []

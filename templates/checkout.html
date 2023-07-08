@@ -36,7 +36,7 @@
 						    <div class="card-header" id="headingOne">
 						      <h5 class="mb-0">
 						        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-						          Billing Address
+						          Recieving Address
 						        </button>
 						      </h5>
 						    </div>
@@ -45,11 +45,11 @@
 						      <div class="card-body">
 						        <div class="billing-address-form">
 						        	<form action="index.html">
-						        		<p><input type="text" placeholder="Name"></p>
-						        		<p><input type="email" placeholder="Email"></p>
-						        		<p><input type="text" placeholder="Address"></p>
-						        		<p><input type="tel" placeholder="Phone"></p>
-						        		<p><textarea name="bill" id="bill" cols="30" rows="10" placeholder="Say Something"></textarea></p>
+						        		<p><input type="text" id="rname" placeholder="Name"></p>
+						        		<p><input type="email" id="remail" placeholder="Email"></p>
+						        		<p><input type="text" id="raddress" placeholder="full Destination Address"></p>
+						        		<p><input type="tel" id="phone" placeholder="Phone"></p>
+						        		<p><textarea name="message" id="sometext" cols="30" rows="10" placeholder="messages"></textarea></p>
 						        	</form>
 						        </div>
 						      </div>
@@ -71,7 +71,7 @@
 						      </div>
 						    </div>
 						  </div>
-						  <div class="card single-accordion">
+						  <!-- <div class="card single-accordion">
 						    <div class="card-header" id="headingThree">
 						      <h5 class="mb-0">
 						        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
@@ -86,7 +86,7 @@
 						        </div>
 						      </div>
 						    </div>
-						  </div>
+						  </div> -->
 						</div>
 
 					</div>
@@ -106,42 +106,160 @@
 									<td>Product</td>
 									<td>Total</td>
 								</tr>
+                 {% if cartList !=None or len(cartList)>1 %}
+                {% for row in cartList%}
 								<tr>
-									<td>Strawberry</td>
-									<td>$85.00</td>
+									<td>{{row['pname']}}</td>
+									<td><del>N</del> {{row['total']}}</td>
 								</tr>
-								<tr>
-									<td>Berry</td>
-									<td>$70.00</td>
-								</tr>
-								<tr>
-									<td>Lemon</td>
-									<td>$35.00</td>
-								</tr>
+                 {% endfor %}
+								{% endif %}
 							</tbody>
 							<tbody class="checkout-details">
 								<tr>
 									<td>Subtotal</td>
-									<td>$190</td>
+									<td> <del>N</del>  {{total}}</td>
 								</tr>
 								<tr>
 									<td>Shipping</td>
-									<td>$50</td>
+									<td><del>N</del> {{shipping}}</td>
 								</tr>
 								<tr>
 									<td>Total</td>
-									<td>$240</td>
+									<td><del>N</del> {{shipping+total}}  </td>
+                  <input type="hidden" value="{{shipping+total}}"  id="showtotal">
 								</tr>
 							</tbody>
 						</table>
-						<a href="#" class="boxed-btn">Place Order</a>
+						<a href="#" id="porder"  class="boxed-btn">Place Order</a>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<!-- end check out section -->
+<script>
+ $(document).ready(function () {
 
+
+   document.getElementById("porder").addEventListener("click",function (e) {
+     e.preventDefault()
+     makePayment()
+   })
+   
+
+function makePayment() {
+  
+ let rname=$("#rname").val();
+ let remail=$("#remail").val();
+ let raddress=$("#raddress").val();
+ let phone=$("#phone").val();
+ let sometext=$("#sometext").val();
+let amount=$("#showtotal").val();
+ 
+if(raddress && rname && remail && phone){
+let url="https://seunaaua-1--rioland.repl.co/"
+
+
+    let sendData={
+      "reference":"response.reference",
+      "transaction":"response.transaction",
+      "trxref":"response.trxref",
+      "amount":"amount",
+      "trans":"response.trans",
+      "remail":"email",
+      "rname":"rname",
+      "raddress":"raddress",
+      "phone":"phone",
+      "sometext":"sometext"
+      
+    }
+
+
+        let options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 
+                    'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(sendData)
+        }
+
+
+        // Fake api for making post requests
+        let fetchRes = fetch(url+"place-oder", options);
+        fetchRes.then(res =>
+            res.json()).then(d => {
+                console.log(d)
+             // window.location.reload()
+            })
+
+  
+  // payWithPaystack(remail,amount,rname,raddress,phone,sometext)
+}else{
+          Swal.fire({
+                  position: 'top-end',
+                  icon: 'info',
+                  title: "fill the recieving address",
+                  showConfirmButton: false,
+                  timer: 1500
+                })
+}
+  
+
+  
+}
+
+
+
+
+function payWithPaystack(email,amount,rname,raddress,phone,sometext) {
+ let url="https://seunaaua-1--rioland.repl.co/"
+// let url="https://seunaaua.onrender.com/"
+     var ref = "ref" + Math.random().toString(16).slice(2)
+  var handler = PaystackPop.setup({
+    key: 'pk_test_66925f6a3b1f39d6a314942d9eeedc54cd23787d', // Replace with your public key
+    email: email,
+    amount: amount * 100, // the amount value is multiplied by 100 to convert to the lowest currency unit
+    currency: 'NGN', // Use GHS for Ghana Cedis or USD for US Dollars
+    ref: ref, // Replace with a reference you generated
+    callback: function(response) {
+      if (response.status="success") {
+
+
+
+        
+        
+      }else{
+        Swal.fire({
+                  position: 'top-end',
+                  icon: 'info',
+                  title: response["message"],
+                  showConfirmButton: false,
+                  timer: 1500
+                })
+      }
+
+
+      
+    },
+    onClose: function() {
+      Swal.fire({
+                  position: 'top-end',
+                  icon: 'info',
+                  title: "Transaction was not completed, window closed.",
+                  showConfirmButton: false,
+                  timer: 1500
+                })
+      // alert('Transaction was not completed, window closed.');
+    },
+  });
+  handler.openIframe();
+}
+
+   
+ })
+</script>
 	<!-- logo carousel -->
 	<div class="logo-carousel-section">
 		<div class="container">

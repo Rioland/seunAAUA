@@ -1,5 +1,6 @@
 import mysql.connector as conn
-
+import smtplib
+from email.mime.text import MIMEText
 # import MySQLdb as conn
 
 # connection = conn.connect(
@@ -154,13 +155,52 @@ def addTOOther(pid,uid):
 def updateCartQTY(data={}):
   cs=connection.cursor()
   query2=f"UPDATE cart SET qty={data['qty']} WHERE cid={data['cid']}"
-  print(cs.execute(query2))
+  cs.execute(query2)
   return True;
   
+
+
+
+
+
+def placeOrder(order):
+  cs=connection.cursor(dictionary=True)
+  query="INSERT INTO orders( uid, trackingID, email, name, reference, trans, trxref, address, someText,phone) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+  cs.execute(query,order)
+  query2=f"SELECT pid,uid,qty FROM `cart` WHERE `uid`='{order[0]}'"
+  cs.execute(query2)
+  cart=cs.fetchall()
+  print(cart)
+  for rows in cart:
+    uid=rows["uid"]
+    pid=rows["pid"]
+    qty=rows["qty"]
+    tid=order[1]
+    q3=f"INSERT INTO `orders_details` (`uid`, `pid`, `qty`, `trackingID`) VALUES ({uid},{pid},{qty},{tid})"
+    cs.execute(q3)
     
-# addTocart("3","4")
+  query3=f"DELETE FROM `cart` WHERE `uid`='{order[0]}'"
+  cs.execute(query3)
 
 
-# getCarts(1)
+
+def sendMail(reciver="riotech2222@gmail.com",orderid="879787987"):
+  sender = 'support@futuremillionaireshub.com'
+  receivers = [reciver]
+  port = 465
+  msg = MIMEText(f'your order has been placed you will recieve a call from the delivery agent: <p> orderId: {orderid} </p> ')
+
+  msg['Subject'] = 'Food Order Notification'
+  msg['From'] = 'support@futuremillionaireshub.com'
+  msg['To'] = reciver
+  with smtplib.SMTP('mail.futuremillionaireshub.com', port) as server:
+
+    server.login('support@futuremillionaireshub.com', '%VRC(mGcb}ac')
+    server.sendmail(sender, receivers, msg.as_string())
+    print("Successfully sent email")
 
 
+
+
+
+# sendMail(reciver="riotech2222@gmail.com",orderid="67788686")
