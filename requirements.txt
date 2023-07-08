@@ -4,5 +4,5 @@ mysql-connector-python
 werkzeug
 flask_redmail
 flask-mail
-smtplib
+# smtplib
 # flask-cors

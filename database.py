@@ -1,5 +1,5 @@
 import mysql.connector as conn
-import smtplib
+# import smtplib
 from email.mime.text import MIMEText
 # import MySQLdb as conn
 
@@ -183,24 +183,3 @@ def placeOrder(order):
   cs.execute(query3)
 
 
-
-def sendMail(reciver="riotech2222@gmail.com",orderid="879787987"):
-  sender = 'support@futuremillionaireshub.com'
-  receivers = [reciver]
-  port = 465
-  msg = MIMEText(f'your order has been placed you will recieve a call from the delivery agent: <p> orderId: {orderid} </p> ')
-
-  msg['Subject'] = 'Food Order Notification'
-  msg['From'] = 'support@futuremillionaireshub.com'
-  msg['To'] = reciver
-  with smtplib.SMTP('mail.futuremillionaireshub.com', port) as server:
-
-    server.login('support@futuremillionaireshub.com', '%VRC(mGcb}ac')
-    server.sendmail(sender, receivers, msg.as_string())
-    print("Successfully sent email")
-
-
-
-
-
-# sendMail(reciver="riotech2222@gmail.com",orderid="67788686")
