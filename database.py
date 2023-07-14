@@ -1,20 +1,5 @@
 import mysql.connector as conn
-# import smtplib
-from email.mime.text import MIMEText
-# import MySQLdb as conn
-
-# connection = conn.connect(
-#   host= os.getenv("HOST"),
-#   user=os.getenv("USERNAME"),
-#   passwd= os.getenv("PASSWORD"),
-#   db= os.getenv("DATABASE"),
-#   autocommit = True,
-#   ssl_mode = "VERIFY_IDENTITY",
-#   ssl      = {
-#     "ca": "/etc/ssl/cert.pem"
-#   }
-# )
-
+import requests  as re
 HOST="db4free.net "
 USERNAME="acoinclub"
 PASSWORD="Rioland@1"
@@ -170,7 +155,6 @@ def placeOrder(order):
   query2=f"SELECT pid,uid,qty FROM `cart` WHERE `uid`='{order[0]}'"
   cs.execute(query2)
   cart=cs.fetchall()
-  print(cart)
   for rows in cart:
     uid=rows["uid"]
     pid=rows["pid"]
@@ -178,8 +162,34 @@ def placeOrder(order):
     tid=order[1]
     q3=f"INSERT INTO `orders_details` (`uid`, `pid`, `qty`, `trackingID`) VALUES ({uid},{pid},{qty},{tid})"
     cs.execute(q3)
+
+  qr=f"SELECT cart.qty as qty, product.image as image,product.pname as name, product.price as price,product.price*cart.qty as total FROM `cart` INNER JOIN product ON cart.pid=product.pid WHERE `uid`={order[0]}"
+  cs.execute(qr)
+
+  product=cs.fetchall()
+  print(product)
+
+
+
+
+  
+  # query3=f"DELETE FROM `cart` WHERE `uid`='{order[0]}'"
+  # cs.execute(query3)
+
+
+
+
+def sendMail(reciever="",products=[],titlt="",others={}):
+  rqbody={
+    "reciever":reciever,
+    "title":"seunAAUA",
+    "products":products,
+   "others": others
+  }
     
-  query3=f"DELETE FROM `cart` WHERE `uid`='{order[0]}'"
-  cs.execute(query3)
 
 
+
+
+
+  

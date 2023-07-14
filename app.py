@@ -4,18 +4,18 @@ from werkzeug.utils import secure_filename
 from functions import isNotEmpty,generateUnid
 from database import * 
 import json
-from flask_redmail import RedMail
-from flask_mail import Mail, Message
+# from flask_redmail import RedMail
+# from flask_mail import Mail, Message
 from datetime import datetime, timedelta 
 app = Flask(__name__)
 app.secret_key = "rioland123456"
-app.config['MAIL_SERVER']='smtp.gmail.com'
-app.config['MAIL_PORT'] = 2525
-app.config['MAIL_USERNAME'] = 'Okeseunbaby98@gamil.com'
-app.config['MAIL_PASSWORD'] = 'Oluwaseyi22*'
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USE_SSL'] = False
-mail = Mail(app)
+# app.config['MAIL_SERVER']='smtp.gmail.com'
+# app.config['MAIL_PORT'] = 2525
+# app.config['MAIL_USERNAME'] = 'Okeseunbaby98@gamil.com'
+# app.config['MAIL_PASSWORD'] = 'Oluwaseyi22*'
+# app.config['MAIL_USE_TLS'] = True
+# app.config['MAIL_USE_SSL'] = False
+# mail = Mail(app)
 
 
 
@@ -190,22 +190,6 @@ def updateUserOthers():
 
 
 # ********************************************
-@app.route("/sendmail",methods=["GET"])
-def sendFlaskEmail():
-  try:
-    msg = Message(
-                    'Hello',
-                    sender ='seunAAUA',
-                    recipients = ['riolandadedamola@gmail.com']
-                   )
-    msg.body = '<h1>Hello Flask message sent from Flask-Mail</h1>'
-    msg.html="<h1>Hello Flask message sent from Flask-Mail</h1>"
-    
-    mail.send(msg)
-    return "ok let me text it"
-  except Exception as e:
-    print(e)
-    return "llllll"
 
 
 

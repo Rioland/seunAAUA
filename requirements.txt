@@ -2,7 +2,6 @@ Flask
 gunicorn
 mysql-connector-python
 werkzeug
-flask_redmail
-flask-mail
+requests
 # smtplib
 # flask-cors
